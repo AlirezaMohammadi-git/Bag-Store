@@ -63,4 +63,20 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    //room
+    implementation "androidx.room:room-runtime:2.5.1"
+    annotationProcessor "androidx.room:room-compiler:2.5.1"
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //cokoil
+    implementation "dev.burnoo:cokoin:1.0.0"
+    implementation "dev.burnoo:cokoin-android-viewmodel:1.0.0"
+    implementation "dev.burnoo:cokoin-android-navigation:1.0.0"
+    //navigation-compose
+    implementation "androidx.navigation:navigation-compose:2.5.3"
+    //System UI Controller
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"
+    //coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 }
