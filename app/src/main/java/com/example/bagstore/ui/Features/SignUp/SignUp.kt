@@ -1,6 +1,8 @@
 package com.example.bagstore.ui.Features.SignUp
 
+import android.util.Log
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,11 +25,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,45 +37,58 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.bagstore.R
 import com.example.bagstore.Utils.NAME_CHAR_LIMIT
 import com.example.bagstore.Utils.PASSWORD_CHAR_LIMIT
+import com.example.bagstore.Utils.SUCCESS_VALUE
 import com.example.bagstore.Utils.Screens
 import com.example.bagstore.ui.theme.brown
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
+import dev.burnoo.cokoin.viewmodel.getViewModel
 
 @Composable
 fun SignUpUI() {
+    val context = LocalContext.current
+    val navigation = getNavController()
+    val viewModel = getViewModel<SignUpViewModel>()
     val sys = rememberSystemUiController()
     SideEffect {
         sys.setStatusBarColor(brown)
     }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.4f)
             .background(color = brown),
     )
-
-    MainCard()
-
+    MainCard(viewModel = viewModel, signUpEvent = {
+        viewModel.signUp {
+            if (it == SUCCESS_VALUE) {
+                navigation.navigate(route = Screens.MainScreen.rout) {
+                    popUpTo(Screens.Intro.rout) {
+                        inclusive = true
+                    }
+                }
+            } else {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }, navigation = navigation )
 }
 
 @Composable
-fun MainCard() {
-    val navigation = getNavController()
-    val name = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val confirmPass = remember { mutableStateOf("") }
-    val emailF = remember { mutableStateOf(false) }
-    val passF = remember { mutableStateOf(false) }
-    val confPassF = remember { mutableStateOf(false) }
-    val passVisibility = remember { mutableStateOf(false) }
-    val confirmPassVisibility = remember { mutableStateOf(false) }
-
+fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: NavHostController) {
+    val name =  viewModel.name
+    val email =  viewModel.email
+    val password =  viewModel.password
+    val confirmPass =  viewModel.confirmPass
+    val emailF =  viewModel.emailF
+    val passF =  viewModel.passF
+    val confPassF =  viewModel.confPassF
+    val passVisibility =  viewModel.passVisibility
+    val confirmPassVisibility =  viewModel.confirmPassVisibility
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,7 +204,9 @@ fun MainCard() {
             Button(
                 modifier = Modifier
                     .padding(4.dp),
-                onClick = { }
+                onClick = {
+                    signUpEvent.invoke()
+                }
             ) {
                 Text(
                     modifier = Modifier
@@ -204,8 +221,8 @@ fun MainCard() {
             ) {
                 Text(text = "Already have an account?")
                 TextButton(onClick = {
-                    navigation.navigate( route = Screens.SignIn.rout ){
-                        popUpTo( route = Screens.SignUp.rout ){
+                    navigation.navigate(route = Screens.SignIn.rout) {
+                        popUpTo(route = Screens.SignUp.rout) {
                             inclusive = true
                         }
                     }
@@ -235,8 +252,8 @@ fun NameTF(
         modifier = Modifier
             .padding(top = 16.dp),
         label = placeHolder,
-        isError = value.length  > charLimit,
-        supportingText = if (value.length  > charLimit) SupportText else EmptySupportText,
+        isError = value.length > charLimit,
+        supportingText = if (value.length > charLimit) SupportText else EmptySupportText,
         singleLine = true,
         shape = MaterialTheme.shapes.large,
         leadingIcon = leadingIC

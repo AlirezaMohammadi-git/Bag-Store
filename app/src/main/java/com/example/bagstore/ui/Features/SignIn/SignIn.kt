@@ -1,5 +1,6 @@
 package com.example.bagstore.ui.Features.SignIn
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,10 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -30,16 +31,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bagstore.R
 import com.example.bagstore.Utils.PASSWORD_CHAR_LIMIT
+import com.example.bagstore.Utils.SUCCESS_VALUE
 import com.example.bagstore.Utils.Screens
 import com.example.bagstore.ui.Features.SignUp.EmailTF
 import com.example.bagstore.ui.Features.SignUp.PasswordTF
 import com.example.bagstore.ui.theme.brown
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
+import dev.burnoo.cokoin.viewmodel.getViewModel
 
 @Composable
 fun SignInUI() {
-
+    val context = LocalContext.current
+    val viewModel = getViewModel<SignInViewModel>()
     val navigation = getNavController()
     val sys = rememberSystemUiController()
     SideEffect {
@@ -53,20 +57,30 @@ fun SignInUI() {
             .background(color = brown),
     )
 
-    MainCard()
+    MainCard(viewModel) {
+        viewModel.signIn {
+            if (SUCCESS_VALUE == it) {
+                navigation.navigate(route = Screens.MainScreen.rout) {
+                    popUpTo(route = Screens.Intro.rout) {
+                        inclusive = true
+                    }
+                }
+            } else Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }
 
 
 @Composable
-fun MainCard() {
+fun MainCard(viewModel: SignInViewModel, signInEvent: () -> Unit) {
     val navigation = getNavController()
-    val name = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val emailF = remember { mutableStateOf(false) }
-    val passF = remember { mutableStateOf(false) }
-    val passVisibility = remember { mutableStateOf(false) }
+
+    val email = remember { viewModel.email }
+    val password = remember { viewModel.password }
+    val emailF = remember { viewModel.emailF }
+    val passF = remember { viewModel.passF }
+    val passVisibility = remember { viewModel.passVisibility }
 
 
     Card(
@@ -139,7 +153,9 @@ fun MainCard() {
             Button(
                 modifier = Modifier
                     .padding(top = 16.dp),
-                onClick = { }
+                onClick = {
+                    signInEvent.invoke()
+                }
             ) {
                 Text(
                     modifier = Modifier
@@ -154,8 +170,8 @@ fun MainCard() {
             ) {
                 Text(text = "Don't have an account?")
                 TextButton(onClick = {
-                    navigation.navigate( route = Screens.SignUp.rout ){
-                        popUpTo( route = Screens.SignIn.rout ){
+                    navigation.navigate(route = Screens.SignUp.rout) {
+                        popUpTo(route = Screens.SignIn.rout) {
                             inclusive = true
                         }
                     }
