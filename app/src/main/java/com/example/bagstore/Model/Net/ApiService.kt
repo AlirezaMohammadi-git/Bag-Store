@@ -1,6 +1,8 @@
 package com.example.bagstore.Model.Net
 
 import com.example.bagstore.Model.Data.LoginResponse
+import com.example.bagstore.Model.Data.ProductRespons
+import com.example.bagstore.Model.Data.RandomAdRespons
 import com.example.bagstore.Model.Local.TokenInMemory
 import com.example.bagstore.Utils.BASE_URL
 import com.google.gson.JsonObject
@@ -21,7 +23,13 @@ interface ApiService {
     suspend fun signIn(@Body jsonObject: JsonObject): LoginResponse
 
     @GET("refreshToken") //token send on header
-    fun refreshToken() : Call<LoginResponse>
+    fun refreshToken(): Call<LoginResponse>
+
+    @GET("getSliderPics")
+    suspend fun getRandomAds() : RandomAdRespons
+
+    @GET("getProducts")
+    suspend fun getProducts() : ProductRespons
 
 
 }

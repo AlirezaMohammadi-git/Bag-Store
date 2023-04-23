@@ -7,5 +7,6 @@ val brown = Color(141, 123, 104)
 val beige = Color(164, 144, 124)
 val lightBeige = Color(200, 182, 166)
 val lighterBeige = Color(241, 222, 201)
+val CardViewBackground = Color(255, 109, 0, 13)
 
 

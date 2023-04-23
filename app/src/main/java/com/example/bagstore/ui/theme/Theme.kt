@@ -18,11 +18,20 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = brown,
     secondary = beige,
+    surface = CardViewBackground,
+    secondaryContainer = CardViewBackground,
+    onTertiary = CardViewBackground,
+    surfaceVariant = CardViewBackground
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = brown,
     secondary = beige,
+    surface = CardViewBackground,
+    secondaryContainer = CardViewBackground,
+    onTertiary = CardViewBackground,
+    surfaceVariant = CardViewBackground
+
 
 
     /* Other default colors to override
