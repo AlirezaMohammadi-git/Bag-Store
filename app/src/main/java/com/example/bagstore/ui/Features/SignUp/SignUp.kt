@@ -1,6 +1,5 @@
 package com.example.bagstore.ui.Features.SignUp
 
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -15,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,8 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -43,7 +42,9 @@ import com.example.bagstore.Utils.NAME_CHAR_LIMIT
 import com.example.bagstore.Utils.PASSWORD_CHAR_LIMIT
 import com.example.bagstore.Utils.SUCCESS_VALUE
 import com.example.bagstore.Utils.Screens
-import com.example.bagstore.ui.theme.brown
+import com.example.bagstore.ui.theme.CardViewBackground
+import com.example.bagstore.ui.theme.brown400
+import com.example.bagstore.ui.theme.brown700
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
@@ -54,14 +55,13 @@ fun SignUpUI() {
     val navigation = getNavController()
     val viewModel = getViewModel<SignUpViewModel>()
     val sys = rememberSystemUiController()
-    SideEffect {
-        sys.setStatusBarColor(brown)
-    }
+    sys.setStatusBarColor(MaterialTheme.colorScheme.primary)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.4f)
-            .background(color = brown),
+            .background(color = MaterialTheme.colorScheme.primary),
     )
     MainCard(viewModel = viewModel, signUpEvent = {
         viewModel.signUp {
@@ -75,27 +75,27 @@ fun SignUpUI() {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         }
-    }, navigation = navigation )
+    }, navigation = navigation)
 }
 
 @Composable
 fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: NavHostController) {
-    val name =  viewModel.name
-    val email =  viewModel.email
-    val password =  viewModel.password
-    val confirmPass =  viewModel.confirmPass
-    val emailF =  viewModel.emailF
-    val passF =  viewModel.passF
-    val confPassF =  viewModel.confPassF
-    val passVisibility =  viewModel.passVisibility
-    val confirmPassVisibility =  viewModel.confirmPassVisibility
+    val name = viewModel.name
+    val email = viewModel.email
+    val password = viewModel.password
+    val confirmPass = viewModel.confirmPass
+    val emailF = viewModel.emailF
+    val passF = viewModel.passF
+    val confPassF = viewModel.confPassF
+    val passVisibility = viewModel.passVisibility
+    val confirmPassVisibility = viewModel.confirmPassVisibility
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.85f)
             .padding(horizontal = 16.dp)
             .padding(top = 80.dp),
-        shape = MaterialTheme.shapes.large
+        shape = MaterialTheme.shapes.extraLarge,
     ) {
         Column(
             modifier = Modifier
@@ -206,7 +206,8 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
                     .padding(4.dp),
                 onClick = {
                     signUpEvent.invoke()
-                }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = brown400)
             ) {
                 Text(
                     modifier = Modifier

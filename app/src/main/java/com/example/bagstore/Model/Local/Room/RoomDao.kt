@@ -25,4 +25,7 @@ interface RoomDao  {
     @Query( "SELECT * FROM ADS_TABLE" )
     suspend fun getAllAds() : List<Ad>
 
+    @Query( "SELECT * FROM PRODUCT_TABLE WHERE category = :category" )
+    suspend fun getProductByCategory( category : String ) : List<Product>
+
 }

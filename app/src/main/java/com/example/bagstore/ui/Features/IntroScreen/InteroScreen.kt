@@ -22,11 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.bagstore.R
 import com.example.bagstore.Utils.Screens
-import com.example.bagstore.ui.theme.beige
-import com.example.bagstore.ui.theme.brown
+import com.example.bagstore.ui.theme.brown200
+import com.example.bagstore.ui.theme.brown400
 import com.example.bagstore.ui.theme.lightBlack
-import com.example.bagstore.ui.theme.lighterBeige
-import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 
@@ -62,18 +60,17 @@ fun InteroScreen() {
                     .fillMaxWidth(0.8f),
                 onClick = {
                     navigation.navigate(Screens.SignIn.rout)
-                }
+                },
             ) {
-                Text(text = "Sign In", fontWeight = FontWeight.Bold)
+                Text(text = "Sign In", fontWeight = FontWeight.Bold  )
             }
             Button(
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
-                colors = ButtonDefaults.buttonColors(containerColor = beige),
                 onClick = {
                     navigation.navigate(Screens.SignUp.rout)
                 }) {
-                Text(text = "Sign Up", color = lightBlack, fontWeight = FontWeight.Bold)
+                Text(text = "Sign Up" , fontWeight = FontWeight.Bold)
             }
         }
 

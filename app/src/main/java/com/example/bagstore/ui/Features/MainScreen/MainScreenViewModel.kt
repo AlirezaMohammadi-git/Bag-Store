@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Model.Data.Ad
 import com.example.bagstore.Model.Repository.ProductRepo.ProductRepository
+import com.example.bagstore.Utils.coroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class MainScreenViewModel(val productRepository: ProductRepository, isInternetConnected: Boolean) :
+class MainScreenViewModel(private val productRepository: ProductRepository, isInternetConnected: Boolean) :
     ViewModel() {
     val products = mutableStateOf<List<Product>>(listOf())
     val ads = mutableStateOf<List<Ad>>(listOf())
@@ -23,7 +24,7 @@ class MainScreenViewModel(val productRepository: ProductRepository, isInternetCo
 
     private fun refreshDataFromNet(isInternetConnected: Boolean) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineExceptionHandler) {
 
             if (isInternetConnected) {
 
@@ -41,6 +42,18 @@ class MainScreenViewModel(val productRepository: ProductRepository, isInternetCo
                 refreshData( newProduct.await() , newAds.await() )
 
                 showProgressBar.value = false
+
+
+            }else {
+
+                val newProduct = async {
+                    productRepository.getAllProducts(isInternetConnected)
+                }
+                val newAds = async {
+                    productRepository.getRandomAds(isInternetConnected)
+                }
+
+                refreshData( newProduct.await() , newAds.await() )
 
 
             }

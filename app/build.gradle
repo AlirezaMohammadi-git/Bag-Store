@@ -80,4 +80,6 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    //coil
+    implementation("io.coil-kt:coil-compose:2.3.0")
 }

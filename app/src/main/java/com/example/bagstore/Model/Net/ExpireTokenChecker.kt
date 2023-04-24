@@ -12,12 +12,12 @@ import org.koin.core.component.inject
 class ExpireTokenChecker : Authenticator, KoinComponent {
     private val apiService: ApiService by inject()
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (TokenInMemory.token != null && !response.request().url().pathSegments().last()
+        if (TokenInMemory.token != null && !response.request.url.pathSegments.last()
                 .equals("refreshToken", false)
         ) {
             val result = refreshToken()
             if (result) {
-                return response.request()
+                return response.request
             }
         }
         return null

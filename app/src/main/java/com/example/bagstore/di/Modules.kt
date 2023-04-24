@@ -9,6 +9,7 @@ import com.example.bagstore.Model.Repository.ProductRepo.ProductRepositoryImpl
 import com.example.bagstore.Model.Repository.UserRepo.UserRepository
 import com.example.bagstore.Model.Repository.UserRepo.UserRepositoryImpl
 import com.example.bagstore.Utils.DATABASE_NAME
+import com.example.bagstore.ui.Features.CategoryScreen.CategoryViewModel
 import com.example.bagstore.ui.Features.MainScreen.MainScreenViewModel
 import com.example.bagstore.ui.Features.SignIn.SignInViewModel
 import com.example.bagstore.ui.Features.SignUp.SignUpViewModel
@@ -40,5 +41,6 @@ val MyModules = module {
     viewModel { SignUpViewModel(get()) }
     viewModel { SignInViewModel(get()) }
     viewModel { (isNetConnected : Boolean )  -> MainScreenViewModel(get() , isNetConnected)  }
+    viewModel { CategoryViewModel( get() ) }
 
 }

@@ -3,15 +3,25 @@ package com.example.bagstore
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.bagstore.Model.Local.TokenInMemory
 import com.example.bagstore.Model.Repository.UserRepo.UserRepository
+import com.example.bagstore.Utils.CATEGORY_KEY
+import com.example.bagstore.Utils.PRODUCT_KEY
 import com.example.bagstore.Utils.Screens
 import com.example.bagstore.di.MyModules
+import com.example.bagstore.ui.Features.CartScreen.CardScreen
+import com.example.bagstore.ui.Features.CategoryScreen.CategoryScreen
 import com.example.bagstore.ui.Features.IntroScreen.InteroScreen
 import com.example.bagstore.ui.Features.MainScreen.MainScreenUI
+import com.example.bagstore.ui.Features.ProductScreen.ProductScreen
+import com.example.bagstore.ui.Features.ProfileScreen.ProfileScreen
 import com.example.bagstore.ui.Features.SignIn.SignInUI
 import com.example.bagstore.ui.Features.SignUp.SignUpUI
 import com.example.bagstore.ui.theme.BagStoreTheme
@@ -30,7 +40,11 @@ class MainActivity : ComponentActivity() {
                     modules(MyModules)
                 }) {
                 BagStoreTheme() {
-                    MainScreen()
+                    Surface(
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        MainScreen()
+                    }
                 }
             }
         }
@@ -53,6 +67,28 @@ class MainActivity : ComponentActivity() {
             }
             composable(Screens.MainScreen.rout) {
                 MainScreenUI()
+            }
+            composable(Screens.CardScreen.rout) {
+                CardScreen()
+            }
+            composable(Screens.ProfileScreen.rout) {
+                ProfileScreen()
+            }
+            composable(
+                route = Screens.ProductScreen.rout + "/" + "{$PRODUCT_KEY}",
+                arguments = listOf(navArgument(PRODUCT_KEY) {
+                    type = NavType.StringType
+                })
+            ) {
+                ProductScreen( it.arguments!!.getString(PRODUCT_KEY , "null") )
+            }
+            composable(
+                route = Screens.CategoryScreen.rout + "/" + "{$CATEGORY_KEY}",
+                arguments = listOf(navArgument(CATEGORY_KEY) {
+                    type = NavType.StringType
+                })
+            ) {
+                CategoryScreen(it.arguments!!.getString(CATEGORY_KEY, "null"))
             }
         })
     }

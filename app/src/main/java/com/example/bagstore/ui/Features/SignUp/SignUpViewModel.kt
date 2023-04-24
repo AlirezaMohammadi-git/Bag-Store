@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.Model.Repository.UserRepo.UserRepository
+import com.example.bagstore.Utils.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(val userRepository: UserRepository) : ViewModel() {
@@ -19,7 +20,7 @@ class SignUpViewModel(val userRepository: UserRepository) : ViewModel() {
     val confirmPassVisibility = mutableStateOf(false)
 
     fun signUp(signUpEvent: (String) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch (coroutineExceptionHandler) {
             signUpEvent(userRepository.signUp(name.value, email.value, password.value))
         }
     }

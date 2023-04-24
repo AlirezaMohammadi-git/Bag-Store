@@ -1,5 +1,6 @@
 package com.example.bagstore.Model.Repository.ProductRepo
 
+import android.util.Log
 import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Model.Data.Ad
 import com.example.bagstore.Model.Local.Room.RoomDao
@@ -33,6 +34,11 @@ class ProductRepositoryImpl(
             return roomDao.getAllAds()
         }
         return listOf()//if none of above works
+    }
+
+    override suspend fun getProductsByCategory(category: String): List<Product> {
+        Log.i("myTag", "getProductsByCategory: ${roomDao.getProductByCategory(category).size} ")
+        return roomDao.getProductByCategory(category)
     }
 
 }

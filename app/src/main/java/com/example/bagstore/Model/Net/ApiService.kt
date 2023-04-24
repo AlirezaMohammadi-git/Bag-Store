@@ -43,7 +43,7 @@ fun createApiService(): ApiService {
             if (TokenInMemory.token != null)
                 newRequest.addHeader("Authorization", TokenInMemory.token!!)
             newRequest.addHeader("Accept", "application/json")
-            newRequest.method(oldRequest.method(), oldRequest.body())
+            newRequest.method(oldRequest.method, oldRequest.body)
             return@addInterceptor it.proceed(newRequest.build())
         }.build()
 
