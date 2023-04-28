@@ -41,4 +41,8 @@ class ProductRepositoryImpl(
         return roomDao.getProductByCategory(category)
     }
 
+    override suspend fun getProductById(productId: String) : Product {
+        return roomDao.getProductById(productId)
+    }
+
 }

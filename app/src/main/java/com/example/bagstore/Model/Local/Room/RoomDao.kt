@@ -20,7 +20,7 @@ interface RoomDao  {
     suspend fun getAllProducts() : List<Product>
 
     @Query( "SELECT * FROM PRODUCT_TABLE WHERE productId = :id" )
-    suspend fun getProductById(id : Int ) : Product
+    suspend fun getProductById(id : String ) : Product
 
     @Query( "SELECT * FROM ADS_TABLE" )
     suspend fun getAllAds() : List<Ad>

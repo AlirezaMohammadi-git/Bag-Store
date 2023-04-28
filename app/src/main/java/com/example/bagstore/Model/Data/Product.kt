@@ -16,5 +16,6 @@ data class Product(
     @PrimaryKey
     val productId: String,
     val soldItem: String,
-    val tags: String
+    val tags: String,
+    val quantity: String?
 )

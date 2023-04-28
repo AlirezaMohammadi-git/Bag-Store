@@ -7,5 +7,6 @@ interface ProductRepository {
     suspend fun getAllProducts(isInternetConnected: Boolean): List<Product>
     suspend fun getRandomAds(isInternetConnected: Boolean): List<Ad>
     suspend fun getProductsByCategory( category : String ) : List<Product>
+    suspend fun getProductById( productId : String ) : Product
 
 }

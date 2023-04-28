@@ -1,5 +1,6 @@
 package com.example.bagstore.Utils
 
+import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.R
 
 const val CATEGORY_KEY = "CATEGORY_KEY"
@@ -31,3 +32,15 @@ val TAGS = listOf(
     "Most Visited",
     "Highest Quality"
 )
+val EMPTY_PRODUCT = Product( "", "", "", "", "", "", "", "","","")
+//val TAG = listOf(
+//    "Error",
+//    "Info",
+//    "Warning"
+//)
+
+sealed class TAG(val tag : String) {
+    object Error : TAG( "ERROR" )
+    object Info : TAG( "INFO" )
+    object Warning : TAG( "WARNING" )
+}

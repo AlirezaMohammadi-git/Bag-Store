@@ -1,8 +1,10 @@
 package com.example.bagstore.ui.Features.MainScreen
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +18,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,10 +46,10 @@ import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Utils.CATEGORY
 import com.example.bagstore.Utils.NetworkChecker
 import com.example.bagstore.Utils.Screens
+import com.example.bagstore.Utils.TAG
 import com.example.bagstore.Utils.TAGS
 import com.example.bagstore.Utils.TOP_BAR_TITLE
-import com.example.bagstore.ui.theme.CardViewBackground
-import com.example.bagstore.ui.theme.CategoriesBackground
+import com.example.bagstore.Utils.stylePrice
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
@@ -69,6 +73,7 @@ fun MainScreenUI() {
     val sys = rememberSystemUiController()
     sys.setStatusBarColor(MaterialTheme.colorScheme.background)
     val navigation = getNavController()
+    val isInternetConnected = NetworkChecker( context ).isInternetConnected
 
     Column(
         modifier = Modifier
@@ -86,13 +91,17 @@ fun MainScreenUI() {
                 .verticalScroll(scrollState)
                 .padding(bottom = 16.dp, top = 8.dp)
         ) {
+            if (isInternetConnected){
+                viewModel.getBudgetNumber()
+            }
             TopBar(
                 onCardClicked = {
                     navigation.navigate(Screens.CardScreen.rout)
                 },
                 onPersonClicked = {
                     navigation.navigate(Screens.ProfileScreen.rout)
-                }
+                } ,
+                badgeNumber = viewModel.budgetNumber.value
             )
             Categories(CATEGORY) {
                 navigation.navigate(Screens.CategoryScreen.rout + "/" + it)
@@ -101,19 +110,20 @@ fun MainScreenUI() {
 
             val productsState = viewModel.products
             val ads = viewModel.ads
+            Log.i(TAG.Info.tag, "MainScreenUI: ${productsState.value} \n ${ads.value}")
             if (!NetworkChecker(context).isInternetConnected) {
                 Toast.makeText(context, "Can not  access to internet!", Toast.LENGTH_SHORT).show()
             }
             ProductBars(
                 TAGS,
                 productsState,
-                ads ,
-            onProductClicked = {
-                navigation.navigate(Screens.ProductScreen.rout + "/" + it)
-            },
-            onAdClicked = {
-                navigation.navigate(Screens.ProductScreen.rout + "/" + it)
-            })
+                ads,
+                onProductClicked = {
+                    navigation.navigate(Screens.ProductScreen.rout + "/" + it)
+                },
+                onAdClicked = {
+                    navigation.navigate(Screens.ProductScreen.rout + "/" + it)
+                })
         }
     }
 }
@@ -140,7 +150,7 @@ fun ProductBars(
                 onProductClicked(it)
             }
             if (ads.value.size >= 2 && (index == 1 || index == 2) && NetworkChecker(context).isInternetConnected) {
-                AdSlide(ads.value[index - 1]){
+                AdSlide(ads.value[index - 1]) {
                     onAdClicked.invoke(it)
                 }
             }
@@ -156,14 +166,30 @@ fun ProductBars(
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(onCardClicked: () -> Unit, onPersonClicked: () -> Unit) {
+fun TopBar(onCardClicked: () -> Unit, onPersonClicked: () -> Unit , badgeNumber : Int) {
     TopAppBar(
         title = { Text(text = TOP_BAR_TITLE) },
         actions = {
-            IconButton(
-                onClick = { onCardClicked.invoke() },
-            ) {
-                Icon(Icons.Default.ShoppingCart, contentDescription = null)
+            if (badgeNumber.equals(0)) {
+                Icon(imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable() {
+                            onCardClicked.invoke()
+                        }
+                        .padding(end = 16.dp)
+                )
+            } else {
+                BadgedBox(
+                    badge = { Badge { Text(text = badgeNumber.toString()) } },
+                    modifier = Modifier.padding(end = 20.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = null,
+                        modifier = Modifier.clickable() {
+                            onCardClicked.invoke()
+                        })
+                }
             }
             IconButton(
                 onClick = { onPersonClicked.invoke() },
@@ -201,7 +227,7 @@ fun CategoryItem(pair: Pair<String, Int>, onCategoryClicked: (String) -> Unit) {
             .padding(end = 10.dp),
     ) {
         Surface(
-            color = CategoriesBackground,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
             shape = Shapes.small,
             onClick = { onCategoryClicked.invoke(pair.first) }
         ) {
@@ -268,7 +294,7 @@ fun ProductItem(product: Product, onProductClicked: (String) -> Unit) {
             .padding(top = 16.dp, end = 16.dp, bottom = 16.dp),
         onClick = { onProductClicked.invoke(product.productId) },
         colors = CardDefaults.cardColors(
-            containerColor = CardViewBackground
+            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
         ),
     ) {
         AsyncImage(
@@ -281,7 +307,7 @@ fun ProductItem(product: Product, onProductClicked: (String) -> Unit) {
             modifier = Modifier.padding(8.dp)
         ) {
             Text(text = product.name, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text(text = product.price + "Tomans", fontSize = 15.sp, fontWeight = FontWeight.Light)
+            Text(text = stylePrice(product.price), fontSize = 15.sp, fontWeight = FontWeight.Light)
             Text(
                 text = product.soldItem + "Sold",
                 fontSize = 12.sp,
@@ -297,7 +323,7 @@ fun ProductItem(product: Product, onProductClicked: (String) -> Unit) {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdSlide(ad: Ad , onAdClicked : (String) -> Unit) {
+fun AdSlide(ad: Ad, onAdClicked: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

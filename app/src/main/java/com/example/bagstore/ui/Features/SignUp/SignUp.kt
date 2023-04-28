@@ -207,7 +207,6 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
                 onClick = {
                     signUpEvent.invoke()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = brown400)
             ) {
                 Text(
                     modifier = Modifier
