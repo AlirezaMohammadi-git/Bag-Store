@@ -137,7 +137,8 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
                         painter = painterResource(id = R.drawable.ic_email),
                         contentDescription = null
                     )
-                }
+                },
+                enabled = true
             )
 
             PasswordTF(
@@ -167,7 +168,7 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
                             .clickable { passVisibility.value = !passVisibility.value }
                     )
                 },
-                visualTransformation = if (passVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+                visualTransformation = if (passVisibility.value) VisualTransformation.None else PasswordVisualTransformation() ,
             )
 
             PasswordTF(
@@ -199,7 +200,7 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
                             }
                     )
                 },
-                visualTransformation = if (confirmPassVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+                visualTransformation = if (confirmPassVisibility.value) VisualTransformation.None else PasswordVisualTransformation() ,
             )
             Button(
                 modifier = Modifier
@@ -271,6 +272,7 @@ fun EmailTF(
     EmptySupportText: @Composable () -> Unit,
     leadingIC: @Composable () -> Unit,
     isFocused: MutableState<Boolean>,
+    enabled : Boolean
 ) {
     OutlinedTextField(
         value = value,
@@ -289,7 +291,8 @@ fun EmailTF(
                 .matches() && isFocused.value
         ) SupportText else EmptySupportText,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        leadingIcon = leadingIC
+        leadingIcon = leadingIC,
+        enabled = enabled
     )
 }
 
@@ -307,6 +310,7 @@ fun PasswordTF(
     leadingIC: @Composable () -> Unit,
     trailingIC: @Composable () -> Unit,
     visualTransformation: VisualTransformation,
+
 ) {
     OutlinedTextField(
         value = value,
@@ -325,7 +329,8 @@ fun PasswordTF(
         leadingIcon = leadingIC,
         trailingIcon = trailingIC,
         visualTransformation = visualTransformation,
-        shape = MaterialTheme.shapes.large
+        shape = MaterialTheme.shapes.large,
+
     )
 
 }

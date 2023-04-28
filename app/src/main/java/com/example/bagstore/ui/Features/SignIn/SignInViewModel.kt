@@ -17,6 +17,8 @@ class SignInViewModel( val userRepository: UserRepository ) : ViewModel() {
     fun signIn( signInEvent : (String) -> Unit ) {
         viewModelScope.launch (coroutineExceptionHandler) {
             signInEvent( userRepository.signIn( email.value , password.value ) )
+            userRepository.saveEmail(email.value)
+            userRepository.saveLoginTime(System.currentTimeMillis())
         }
     }
 

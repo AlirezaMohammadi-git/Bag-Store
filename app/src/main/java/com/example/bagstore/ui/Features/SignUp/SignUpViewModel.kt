@@ -22,6 +22,8 @@ class SignUpViewModel(val userRepository: UserRepository) : ViewModel() {
     fun signUp(signUpEvent: (String) -> Unit) {
         viewModelScope.launch (coroutineExceptionHandler) {
             signUpEvent(userRepository.signUp(name.value, email.value, password.value))
+            userRepository.saveEmail(email.value)
+            userRepository.saveLoginTime(System.currentTimeMillis())
         }
     }
 

@@ -12,5 +12,16 @@ interface UserRepository {
 
     fun signOut()
 
+    fun saveAddress(address: String)
+    fun savePostalCode(postalCode: String)
+    fun getUserAddress(): String
+    fun getUserPostalCode(): String
+
+    fun saveEmail(email: String)
+    fun getEmail(): String
+
+    fun saveLoginTime(time: Long)
+    fun getLoginTime(): String
+
 
 }
