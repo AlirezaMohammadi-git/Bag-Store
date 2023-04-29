@@ -14,6 +14,7 @@ import com.example.bagstore.Model.Repository.ProductRepo.ProductRepositoryImpl
 import com.example.bagstore.Model.Repository.UserRepo.UserRepository
 import com.example.bagstore.Model.Repository.UserRepo.UserRepositoryImpl
 import com.example.bagstore.Utils.DATABASE_NAME
+import com.example.bagstore.ui.Features.CartScreen.CardViewModel
 import com.example.bagstore.ui.Features.CategoryScreen.CategoryViewModel
 import com.example.bagstore.ui.Features.MainScreen.MainScreenViewModel
 import com.example.bagstore.ui.Features.ProductScreen.ProductScreenViewModel
@@ -26,7 +27,6 @@ import org.koin.dsl.module
 
 
 val MyModules = module {
-
     single { createApiService() }
     single { androidContext().getSharedPreferences("tokenData", Context.MODE_PRIVATE) }
     single {
@@ -37,7 +37,6 @@ val MyModules = module {
         )
             .build()
     }
-
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<ProductRepository> {
         ProductRepositoryImpl(
@@ -46,13 +45,13 @@ val MyModules = module {
         )
     }
     single<CommentRepository> { CommentRepositoryImpl(get()) }
-    single<CardRepository> { CardRepositoryImpl(get()) }
-
+    single<CardRepository> { CardRepositoryImpl(get() , get()) }
     viewModel { SignUpViewModel(get()) }
     viewModel { SignInViewModel(get()) }
     viewModel { (isNetConnected: Boolean) -> MainScreenViewModel(get(), isNetConnected , get()) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProductScreenViewModel(get(), get(), get()) }
     viewModel { ProfileScreenViewModel(get()) }
+    viewModel { CardViewModel(get() , get()) }
 
 }

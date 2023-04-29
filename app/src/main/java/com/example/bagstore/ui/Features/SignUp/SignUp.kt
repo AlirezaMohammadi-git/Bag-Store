@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -63,21 +67,26 @@ fun SignUpUI() {
             .fillMaxHeight(0.4f)
             .background(color = MaterialTheme.colorScheme.primary),
     )
-    MainCard(viewModel = viewModel, signUpEvent = {
-        viewModel.signUp {
-            if (it == SUCCESS_VALUE) {
-                navigation.navigate(route = Screens.MainScreen.rout) {
-                    popUpTo(Screens.Intro.rout) {
-                        inclusive = true
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        MainCard(viewModel = viewModel, signUpEvent = {
+            viewModel.signUp {
+                if (it == SUCCESS_VALUE) {
+                    navigation.navigate(route = Screens.MainScreen.rout) {
+                        popUpTo(Screens.Intro.rout) {
+                            inclusive = true
+                        }
                     }
+                } else {
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
-        }
-    }, navigation = navigation)
+        }, navigation = navigation)
+        Spacer(modifier = Modifier.height(150.dp))
+    }
 }
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++   MainCard  ++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @Composable
 fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: NavHostController) {
     val name = viewModel.name
@@ -99,7 +108,8 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+            ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -234,7 +244,9 @@ fun MainCard(signUpEvent: () -> Unit, viewModel: SignUpViewModel, navigation: Na
         }
     }
 }
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++   NameTF  ++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NameTF(
@@ -260,8 +272,9 @@ fun NameTF(
         leadingIcon = leadingIC
     )
 }
-
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++   EmailTF  +++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailTF(
@@ -286,7 +299,7 @@ fun EmailTF(
         label = placeHolder,
         shape = MaterialTheme.shapes.large,
         isError = !Patterns.EMAIL_ADDRESS.matcher(value).matches() && isFocused.value,
-        singleLine = true,
+        singleLine = false,
         supportingText = if (!Patterns.EMAIL_ADDRESS.matcher(value)
                 .matches() && isFocused.value
         ) SupportText else EmptySupportText,
@@ -295,7 +308,9 @@ fun EmailTF(
         enabled = enabled
     )
 }
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++   PasswordTF  ++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTF(
@@ -310,7 +325,6 @@ fun PasswordTF(
     leadingIC: @Composable () -> Unit,
     trailingIC: @Composable () -> Unit,
     visualTransformation: VisualTransformation,
-
 ) {
     OutlinedTextField(
         value = value,

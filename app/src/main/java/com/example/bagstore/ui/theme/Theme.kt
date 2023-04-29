@@ -20,10 +20,6 @@ private val LightColorScheme = lightColorScheme(
     primary = brown700,
     onPrimary = Color.White,
     secondary = Color.Gray,
-    onSecondary = Color.DarkGray,
-    surface = CardViewBackground,
-    onSurface = Color.Black,
-    surfaceVariant = Color.Black,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

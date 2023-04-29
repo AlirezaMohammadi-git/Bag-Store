@@ -2,14 +2,17 @@ package com.example.bagstore.Model.Net
 
 import com.example.bagstore.Model.Data.AddNewCommentResponse
 import com.example.bagstore.Model.Data.CartResponse
+import com.example.bagstore.Model.Data.CheckOut
 import com.example.bagstore.Model.Data.CommentResponse
 import com.example.bagstore.Model.Data.LoginResponse
 import com.example.bagstore.Model.Data.ProductRespons
 import com.example.bagstore.Model.Data.RandomAdRespons
+import com.example.bagstore.Model.Data.SubmitOrder
 import com.example.bagstore.Model.Data.UserCartInfo
 import com.example.bagstore.Model.Local.TokenInMemory
 import com.example.bagstore.Utils.BASE_URL
 import com.google.gson.JsonObject
+import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -44,8 +47,18 @@ interface ApiService {
     @POST("addToCart")
     suspend fun addToCart(@Body PID: JsonObject): CartResponse
 
+    @POST("removeFromCart")
+    suspend fun removeFromCart(@Body PID: JsonObject): CartResponse
+
+
     @GET("getUserCart")
     suspend fun getUserCart(): UserCartInfo
+
+    @POST( "submitOrder" )
+    suspend fun submitOrder( @Body location : JsonObject ) : SubmitOrder
+
+    @POST( "checkout" )
+    suspend fun checkOut( orderId : JsonObject ) : CheckOut
 }
 
 fun createApiService(): ApiService {
@@ -58,7 +71,9 @@ fun createApiService(): ApiService {
             newRequest.addHeader("Accept", "application/json")//if server get other types of data
             newRequest.method(oldRequest.method, oldRequest.body)
             return@addInterceptor it.proceed(newRequest.build())
-        }.build()
+        }
+        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+        .build()
 
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

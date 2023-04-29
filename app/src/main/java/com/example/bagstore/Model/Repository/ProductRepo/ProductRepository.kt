@@ -8,5 +8,4 @@ interface ProductRepository {
     suspend fun getRandomAds(isInternetConnected: Boolean): List<Ad>
     suspend fun getProductsByCategory( category : String ) : List<Product>
     suspend fun getProductById( productId : String ) : Product
-
 }

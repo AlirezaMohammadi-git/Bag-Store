@@ -22,7 +22,6 @@ class ProductRepositoryImpl(
         }
         return listOf()//if none of above works
     }
-
     override suspend fun getRandomAds(isInternetConnected: Boolean): List<Ad> {
         if (isInternetConnected) {
             val dataFromServer = apiService.getRandomAds()
@@ -35,14 +34,11 @@ class ProductRepositoryImpl(
         }
         return listOf()//if none of above works
     }
-
     override suspend fun getProductsByCategory(category: String): List<Product> {
         Log.i("myTag", "getProductsByCategory: ${roomDao.getProductByCategory(category).size} ")
         return roomDao.getProductByCategory(category)
     }
-
     override suspend fun getProductById(productId: String) : Product {
         return roomDao.getProductById(productId)
     }
-
 }

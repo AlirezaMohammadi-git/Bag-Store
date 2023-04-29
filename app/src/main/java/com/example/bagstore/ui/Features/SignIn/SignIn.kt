@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -47,19 +51,32 @@ fun SignInUI() {
     val context = LocalContext.current
     val viewModel = getViewModel<SignInViewModel>()
     val navigation = getNavController()
-    MainCard(viewModel) {
-        viewModel.signIn {
-            if (SUCCESS_VALUE == it) {
-                navigation.navigate(route = Screens.MainScreen.rout) {
-                    popUpTo(route = Screens.Intro.rout) {
-                        inclusive = true
-                    }
-                }
-            } else Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        }
-    }
-}
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.4f)
+            .background(color = MaterialTheme.colorScheme.primary),
+    )
 
+    Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+        MainCard(viewModel) {
+            viewModel.signIn {
+                if (SUCCESS_VALUE == it) {
+                    navigation.navigate(route = Screens.MainScreen.rout) {
+                        popUpTo(route = Screens.Intro.rout) {
+                            inclusive = true
+                        }
+                    }
+                } else Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+        Spacer(modifier = Modifier.height(150.dp))
+    }
+
+    }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++   MainCard  ++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @Composable
 fun MainCard(viewModel: SignInViewModel, signInEvent: () -> Unit) {
     val navigation = getNavController()

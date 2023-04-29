@@ -33,14 +33,10 @@ val TAGS = listOf(
     "Highest Quality"
 )
 val EMPTY_PRODUCT = Product( "", "", "", "", "", "", "", "","","")
-//val TAG = listOf(
-//    "Error",
-//    "Info",
-//    "Warning"
-//)
-
 sealed class TAG(val tag : String) {
     object Error : TAG( "ERROR" )
     object Info : TAG( "INFO" )
     object Warning : TAG( "WARNING" )
 }
+const val NO_ADDRESS = "No Address"
+const val NO_POSTALCODE = "No Postal Code"

@@ -12,20 +12,14 @@ import com.example.bagstore.Model.Data.Ad
 interface RoomDao  {
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     suspend fun insertOrUpdateProduct(product : List<Product> )
-
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     suspend fun insertOrUpdateAd(ad : List<Ad> )
-
     @Query( "SELECT * FROM PRODUCT_TABLE" )
     suspend fun getAllProducts() : List<Product>
-
     @Query( "SELECT * FROM PRODUCT_TABLE WHERE productId = :id" )
     suspend fun getProductById(id : String ) : Product
-
     @Query( "SELECT * FROM ADS_TABLE" )
     suspend fun getAllAds() : List<Ad>
-
     @Query( "SELECT * FROM PRODUCT_TABLE WHERE category = :category" )
     suspend fun getProductByCategory( category : String ) : List<Product>
-
 }
