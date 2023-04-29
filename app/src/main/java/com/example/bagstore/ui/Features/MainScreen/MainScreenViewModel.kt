@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bagstore.Model.Data.Ad
+import com.example.bagstore.Model.Data.CheckOut
 import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Model.Repository.CartRepo.CardRepository
 import com.example.bagstore.Model.Repository.ProductRepo.ProductRepository
@@ -22,6 +23,8 @@ class MainScreenViewModel(
     val ads = mutableStateOf<List<Ad>>(listOf())
     val showProgressBar = mutableStateOf(false)
     val budgetNumber = mutableStateOf(0)
+    val showPaymentDialog = mutableStateOf(false)
+    val checkoutData = mutableStateOf(CheckOut(null, null))
 
     init {
         refreshDataFromNet(isInternetConnected)
@@ -29,16 +32,16 @@ class MainScreenViewModel(
 
     private fun refreshDataFromNet(isInternetConnected: Boolean) {
         viewModelScope.launch(coroutineExceptionHandler) {
-                showProgressBar.value = true
-                delay(1000)
-                val newProduct = async {
-                    productRepository.getAllProducts(isInternetConnected)
-                }
-                val newAds = async {
-                    productRepository.getRandomAds(isInternetConnected)
-                }
-                refreshData(newProduct.await(), newAds.await())
-                showProgressBar.value = false
+            showProgressBar.value = true
+            delay(1000)
+            val newProduct = async {
+                productRepository.getAllProducts(isInternetConnected)
+            }
+            val newAds = async {
+                productRepository.getRandomAds(isInternetConnected)
+            }
+            refreshData(newProduct.await(), newAds.await())
+            showProgressBar.value = false
         }
     }
 
@@ -47,10 +50,29 @@ class MainScreenViewModel(
         this.ads.value = ads
     }
 
-     fun getBudgetNumber() {
+    fun getBudgetNumber() {
         viewModelScope.launch(coroutineExceptionHandler) {
             val userCard = cardRepository.getBudgetNumber()
             budgetNumber.value = userCard
+        }
+    }
+
+    fun getPaymentStatus(): Int {
+        return cardRepository.getPurchaseStatus()
+    }
+
+    fun savePaymentStatus(status: Int) {
+        cardRepository.savePurchaseStatus(status)
+    }
+
+    fun checkOutData() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            val result = cardRepository.checkOrderStatus(cardRepository.getOrderId())
+            if (result.success!!) {
+                checkoutData.value = result
+                showPaymentDialog.value = true
+            }
+
         }
     }
 

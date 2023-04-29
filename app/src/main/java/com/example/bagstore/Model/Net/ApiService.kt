@@ -56,9 +56,8 @@ interface ApiService {
 
     @POST( "submitOrder" )
     suspend fun submitOrder( @Body location : JsonObject ) : SubmitOrder
-
     @POST( "checkout" )
-    suspend fun checkOut( orderId : JsonObject ) : CheckOut
+    suspend fun checkOut(@Body orderId : JsonObject ) : CheckOut
 }
 
 fun createApiService(): ApiService {

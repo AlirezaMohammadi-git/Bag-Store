@@ -44,12 +44,16 @@ import coil.compose.AsyncImage
 import com.example.bagstore.Model.Data.Ad
 import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Utils.CATEGORY
+import com.example.bagstore.Utils.NO_PAYMENT
 import com.example.bagstore.Utils.NetworkChecker
+import com.example.bagstore.Utils.PAYMENT_PENDING
+import com.example.bagstore.Utils.PAYMENT_SUCCESS
 import com.example.bagstore.Utils.Screens
 import com.example.bagstore.Utils.TAG
 import com.example.bagstore.Utils.TAGS
 import com.example.bagstore.Utils.TOP_BAR_TITLE
 import com.example.bagstore.Utils.stylePrice
+import com.example.bagstore.ui.Features.ProductScreen.SimpleDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.viewmodel.getViewModel
@@ -73,7 +77,11 @@ fun MainScreenUI() {
     val sys = rememberSystemUiController()
     sys.setStatusBarColor(MaterialTheme.colorScheme.background)
     val navigation = getNavController()
-    val isInternetConnected = NetworkChecker( context ).isInternetConnected
+    val isInternetConnected = NetworkChecker(context).isInternetConnected
+
+    if (viewModel.getPaymentStatus() == PAYMENT_PENDING) {
+        viewModel.checkOutData()
+    }
 
     Column(
         modifier = Modifier
@@ -91,7 +99,7 @@ fun MainScreenUI() {
                 .verticalScroll(scrollState)
                 .padding(bottom = 16.dp, top = 8.dp)
         ) {
-            if (isInternetConnected){
+            if (isInternetConnected) {
                 viewModel.getBudgetNumber()
             }
             TopBar(
@@ -100,7 +108,7 @@ fun MainScreenUI() {
                 },
                 onPersonClicked = {
                     navigation.navigate(Screens.ProfileScreen.rout)
-                } ,
+                },
                 badgeNumber = viewModel.budgetNumber.value
             )
             Categories(CATEGORY) {
@@ -126,6 +134,28 @@ fun MainScreenUI() {
                 })
         }
     }
+
+    if (viewModel.showPaymentDialog.value) {
+        if (viewModel.checkoutData.value.order!!.status.toInt() == PAYMENT_SUCCESS) {
+           SimpleDialog(
+                text = "Your Payment was successful ",
+                Onconfirm = {
+                    viewModel.showPaymentDialog.value = false
+                    viewModel.savePaymentStatus(NO_PAYMENT)
+                }
+            )
+
+        } else {
+            SimpleDialog(
+                text = "Your Payment was failed ",
+                Onconfirm = {
+                    viewModel.showPaymentDialog.value = false
+                    viewModel.savePaymentStatus(NO_PAYMENT)
+                }
+            )
+        }
+    }
+
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -166,7 +196,7 @@ fun ProductBars(
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(onCardClicked: () -> Unit, onPersonClicked: () -> Unit , badgeNumber : Int) {
+fun TopBar(onCardClicked: () -> Unit, onPersonClicked: () -> Unit, badgeNumber: Int) {
     TopAppBar(
         title = { Text(text = TOP_BAR_TITLE) },
         actions = {

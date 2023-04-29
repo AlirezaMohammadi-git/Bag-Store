@@ -9,6 +9,7 @@ import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Model.Repository.CartRepo.CardRepository
 import com.example.bagstore.Model.Repository.ProductRepo.ProductRepository
 import com.example.bagstore.Model.Repository.UserRepo.UserRepository
+import com.example.bagstore.Utils.PAYMENT_PENDING
 import com.example.bagstore.Utils.TAG
 import com.example.bagstore.Utils.coroutineExceptionHandler
 import kotlinx.coroutines.delay
@@ -66,6 +67,7 @@ class CardViewModel(
             val response = cartRepository.submitOrder( address , postalCode )
             delay(300)
             showAnimation.value = false
+            cartRepository.savePurchaseStatus(PAYMENT_PENDING)
             result.invoke(response)
         }
     }

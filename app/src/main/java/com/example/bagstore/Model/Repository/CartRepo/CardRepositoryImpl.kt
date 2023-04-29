@@ -2,6 +2,8 @@ package com.example.bagstore.Model.Repository.CartRepo
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.example.bagstore.Model.Data.CheckOut
 import com.example.bagstore.Model.Data.Product
 import com.example.bagstore.Model.Data.SubmitOrder
@@ -71,7 +73,7 @@ class CardRepositoryImpl(
     override suspend fun checkOrderStatus(orderId: String): CheckOut {
         val json = JsonObject()
         json.apply {
-            addProperty("orderId" , orderId)
+            addProperty("orderId", orderId)
         }
         val response = apiService.checkOut(json)
         return if (response.success == true) response else CheckOut(null, null)
@@ -88,7 +90,6 @@ class CardRepositoryImpl(
             Log.e(TAG.Error.tag, "submitOrder: something went wrong", )
             "null"
         }
-
     }
 
     override fun saveOrderId(orderId: String) {

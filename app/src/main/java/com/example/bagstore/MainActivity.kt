@@ -1,6 +1,7 @@
 package com.example.bagstore
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +33,8 @@ import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        //force Right to left:
+        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
         super.onCreate(savedInstanceState)
         setContent {
             Koin(

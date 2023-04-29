@@ -40,3 +40,7 @@ sealed class TAG(val tag : String) {
 }
 const val NO_ADDRESS = "No Address"
 const val NO_POSTALCODE = "No Postal Code"
+const val PAYMENT_SUCCESS = 1
+const val PAYMENT_PENDING = 0
+const val PAYMENT_FAIL = -1
+const val NO_PAYMENT = -2
