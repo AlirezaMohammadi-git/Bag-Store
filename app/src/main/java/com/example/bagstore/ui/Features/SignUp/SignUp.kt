@@ -60,7 +60,6 @@ fun SignUpUI() {
     val viewModel = getViewModel<SignUpViewModel>()
     val sys = rememberSystemUiController()
     sys.setStatusBarColor(MaterialTheme.colorScheme.primary)
-
     Box(
         modifier = Modifier
             .fillMaxWidth()

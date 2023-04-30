@@ -20,7 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,8 +56,7 @@ fun SignInUI() {
             .fillMaxHeight(0.4f)
             .background(color = MaterialTheme.colorScheme.primary),
     )
-
-    Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         MainCard(viewModel) {
             viewModel.signIn {
                 if (SUCCESS_VALUE == it) {
@@ -72,8 +70,8 @@ fun SignInUI() {
         }
         Spacer(modifier = Modifier.height(150.dp))
     }
+}
 
-    }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++   MainCard  ++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -85,119 +83,104 @@ fun MainCard(viewModel: SignInViewModel, signInEvent: () -> Unit) {
     val emailF = remember { viewModel.emailF }
     val passF = remember { viewModel.passF }
     val passVisibility = remember { viewModel.passVisibility }
-    Surface(
-        color = MaterialTheme.colorScheme.background,
-        modifier = Modifier.fillMaxSize()
+    Column(
+        modifier = Modifier
     ) {
-        Box(modifier = Modifier) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.4f)
-                    .background(MaterialTheme.colorScheme.primary),
-            ) {
-// colored box for background
-            }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.7f)
+                .padding(horizontal = 16.dp)
+                .padding(top = 160.dp),
+            shape = MaterialTheme.shapes.extraLarge,
+        ) {
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Card(
+                Text(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.7f)
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 160.dp),
-                    shape = MaterialTheme.shapes.extraLarge,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 16.dp),
-                            text = "Sign In",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 38.sp
-                        )
+                        .padding(top = 16.dp),
+                    text = "Sign In",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 38.sp
+                )
 
-                        EmailTF(
-                            value = email.value,
-                            onValueChange = {
-                                email.value = it
-                            },
-                            placeHolder = { Text(text = "Email") },
-                            SupportText = { Text(text = "Please enter a valid email") },
-                            isFocused = emailF,
-                            EmptySupportText = { },
-                            leadingIC = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_email),
-                                    contentDescription = null
-                                )
-                            },
-                            enabled = true
+                EmailTF(
+                    value = email.value,
+                    onValueChange = {
+                        email.value = it
+                    },
+                    placeHolder = { Text(text = "Email") },
+                    SupportText = { Text(text = "Please enter a valid email") },
+                    isFocused = emailF,
+                    EmptySupportText = { },
+                    leadingIC = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_email),
+                            contentDescription = null
                         )
-                        PasswordTF(
-                            value = password.value,
-                            onValueChange = {
-                                password.value = it
-                            },
-                            placeHolder = { Text(text = "Password") },
-                            SupportText = { },
-                            passChar = PASSWORD_CHAR_LIMIT,
-                            isFocuse = passF,
-                            EmptySupportText = {},
-                            isError = false,
-                            leadingIC = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_lock),
-                                    contentDescription = null
-                                )
-                            },
-                            trailingIC = {
-                                val image =
-                                    if (passVisibility.value) R.drawable.ic_unlock_eye else R.drawable.ic_lock_eye
-                                Icon(
-                                    painter = painterResource(id = image),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .clickable { passVisibility.value = !passVisibility.value }
-                                )
-                            },
-                            visualTransformation = if (passVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+                    },
+                    enabled = true
+                )
+                PasswordTF(
+                    value = password.value,
+                    onValueChange = {
+                        password.value = it
+                    },
+                    placeHolder = { Text(text = "Password") },
+                    SupportText = { },
+                    passChar = PASSWORD_CHAR_LIMIT,
+                    isFocuse = passF,
+                    EmptySupportText = {},
+                    isError = false,
+                    leadingIC = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_lock),
+                            contentDescription = null
                         )
-                        Button(
+                    },
+                    trailingIC = {
+                        val image =
+                            if (passVisibility.value) R.drawable.ic_unlock_eye else R.drawable.ic_lock_eye
+                        Icon(
+                            painter = painterResource(id = image),
+                            contentDescription = null,
                             modifier = Modifier
-                                .padding(top = 16.dp),
-                            onClick = {
-                                signInEvent.invoke()
-                            },
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(4.dp),
-                                text = "Sign In",
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = "Don't have an account?")
-                            TextButton(onClick = {
-                                navigation.navigate(route = Screens.SignUp.rout) {
-                                    popUpTo(route = Screens.SignIn.rout) {
-                                        inclusive = true
-                                    }
-                                }
-                            }) {
-                                Text(text = "Sign Up")
+                                .clickable { passVisibility.value = !passVisibility.value }
+                        )
+                    },
+                    visualTransformation = if (passVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+                )
+                Button(
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    onClick = {
+                        signInEvent.invoke()
+                    },
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(4.dp),
+                        text = "Sign In",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Don't have an account?")
+                    TextButton(onClick = {
+                        navigation.navigate(route = Screens.SignUp.rout) {
+                            popUpTo(route = Screens.SignIn.rout) {
+                                inclusive = true
                             }
                         }
+                    }) {
+                        Text(text = "Sign Up")
                     }
                 }
             }
