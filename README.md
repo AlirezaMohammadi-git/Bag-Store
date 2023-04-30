@@ -6,7 +6,9 @@ A Simple Store project using jetpack compose , MVVM architecture , cokoil , coil
 
 ## Screenshots
 
-![App Screenshots( mroe shots in ScreenShotsfolder )](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_11_2023-04-30_23-39-21.jpg)
+more shots in ScreenShotsfolder
+
+![App Screenshots](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_11_2023-04-30_23-39-21.jpg)
 ![](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_12_2023-04-30_23-39-21.jpg)
 ![](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_13_2023-04-30_23-39-21.jpg)![](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_1_2023-04-30_23-39-21.jpg)
 
