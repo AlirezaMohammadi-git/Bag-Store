@@ -13,9 +13,7 @@ more shots in ScreenShotsfolder
 ![](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_13_2023-04-30_23-39-21.jpg)![](https://github.com/pixel-Alireza/Bag-Store/blob/main/ScreenShots/photo_1_2023-04-30_23-39-21.jpg)
 
 
-## Thanks to dunijet.ir
 
-In this project dunijet.ir APIs used.
 
 
 
